@@ -1,2 +1,2 @@
-# TIL
-Today I Learned
+# Diary
+내 하루의 공부 일지 작성 레지토리
