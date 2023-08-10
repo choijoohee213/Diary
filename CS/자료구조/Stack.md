@@ -76,7 +76,7 @@ public class ArrayStack<E> implements Stack<E> {
 ``` java
 public class LinkedListStack<E> implements Stack<E> {
     private Node<E> head;
-    private Node<E> tail;
+    private Node<E> top;
     private int size = 0;
 
     private class Node<E> {
@@ -89,7 +89,9 @@ public class LinkedListStack<E> implements Stack<E> {
     }
 
     public Node<E> search(int idx) {
-        if(size <= idx) return null;
+        if(size <= idx) {
+            throw new ArrayIndexOutOfBoundsException(idx);
+        }
         Node node = head;
 
         for (int i = 0; i < idx; i++) {
@@ -103,12 +105,13 @@ public class LinkedListStack<E> implements Stack<E> {
     public boolean add(E data) {
         Node<E> newNode = new Node<>(data);
 
-        if(tail == null) {
+        if(isEmpty()) {
             head = newNode;
-            tail = newNode;
+            top = newNode;
         } else {
-            tail.next = newNode;
-            tail = newNode;
+            Node<E> tmp = top;
+            tmp.next = newNode;
+            top = newNode;
         }
         size++;
         return true;
@@ -116,16 +119,16 @@ public class LinkedListStack<E> implements Stack<E> {
 
     @Override
     public E pop() {
-        Node<E> deleted = tail;
+        Node<E> deleted = top;
         E data = deleted.data;
 
         if(size == 1) {
             head = null;
-            tail = null;
+            top = null;
         } else {
             Node<E> node = search(size - 2);
             node.next = null;
-            tail = node;
+            top = node;
         }
         deleted = null;
         size--;
@@ -134,7 +137,7 @@ public class LinkedListStack<E> implements Stack<E> {
 
     @Override
     public E peek() {
-        return tail.data;
+        return top.data;
     }
 
     @Override
@@ -157,9 +160,8 @@ public class LinkedListStack<E> implements Stack<E> {
             tmp = null;
         }
         head = null;
-        tail = null;
+        top = null;
         size = 0;
     }
 }
-
 ```
