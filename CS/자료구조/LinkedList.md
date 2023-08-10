@@ -2,30 +2,33 @@
 
 
 ``` java
-public class LinkedList<T> {
-    private Node<T> head;
-    private Node<T> tail;
+public class LinkedList<E> {
+    private Node<E> head;
+    private Node<E> tail;
     private int size = 0;
 
-    private class Node<T> {
-        private Node<T> next;
-        private T data;
+    private class Node<E> {
+        private Node<E> next;
+        private E data;
 
-        public Node(T data) {
+        public Node(E data) {
             this.data = data;
         }
     }
 
-    public Node<T> search(int idx) {
-        Node<T> node = head;
+    public Node<E> search(int idx) {  //idx번째 있는 노드 반환
+        if(idx >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        Node<E> node = head;
         for (int i = 0; i < idx; i++) {
             node = node.next;
         }
         return node;
     }
 
-    public void addFirst(T data) {
-        Node<T> newNode = new Node(data);
+    public void addFirst(E data) {  //맨 앞에 노드 추가
+        Node<E> newNode = new Node(data);
 
         newNode.next = head;
         head = newNode;
@@ -36,14 +39,14 @@ public class LinkedList<T> {
         }
     }
 
-    public void add(int idx, T data) {
+    public void add(int idx, E data) {  //idx번째에 노드 추가
         if(idx == 0) {
             addFirst(data);
             return;
         }
 
-        Node<T> newNode = new Node<>(data);
-        Node<T> tmp = search(idx-1);
+        Node<E> newNode = new Node<>(data);
+        Node<E> tmp = search(idx-1);
         newNode.next = tmp.next;
         tmp.next = newNode;
         size++;
@@ -53,12 +56,12 @@ public class LinkedList<T> {
         }
     }
 
-    public T removeFirst() {
+    public E removeFirst() {  //맨 앞 노드 삭제
         if(head == null) {
-            return null;
+            throw new IndexOutOfBoundsException();
         }
-        T data = head.data;
-        Node<T> tmp = head;
+        E data = head.data;
+        Node<E> tmp = head;
         head = tmp.next;
 
         tmp = null;
@@ -66,19 +69,19 @@ public class LinkedList<T> {
         return data;
     }
 
-    public T remove(int idx) {
+    public E remove(int idx) {  //idx번째에 있는 노드 삭제
         if(idx >= size) {
-            return null;
+            throw new IndexOutOfBoundsException();
         }
         if(idx == 0) {
             return removeFirst();
         }
 
-        Node<T> node = search(idx-1);
-        Node<T> deleted = node.next;
+        Node<E> node = search(idx-1);
+        Node<E> deleted = node.next;
 
         node.next = deleted.next;
-        T data = deleted.data;
+        E data = deleted.data;
         deleted = null;
         size--;
 
@@ -88,13 +91,13 @@ public class LinkedList<T> {
         return data;
     }
 
-    public void print() {
+    public void print() {  //모든 노드의 데이터 순서대로 출력
         if(head == null) {
             System.out.println("x");
             return;
         }
 
-        Node<T> node = head;
+        Node<E> node = head;
         while(node != null) {
             System.out.print(node.data + " ");
             node = node.next;
@@ -102,7 +105,7 @@ public class LinkedList<T> {
         System.out.println();
     }
 
-    public void printInfo() {
+    public void printInfo() {  //현재 head, tail의 데이터와 size 출력
         if(size == 0) return;
         System.out.println("head : " + head.data + ",tail : " + tail.data + ",size : " + size);
     }
